@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+
+    mysql:
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        image: 'mysql:5.7'
+        volumes:
+            - ./var/mysql:/var/lib/mysql
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 1q2w3e4r
+            MYSQL_DATABASE: wp
+            MYSQL_USER: wp
+            MYSQL_PASSWORD: 1q2w3e4r
+    www:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        volumes:
+            - ./app:/var/www/html
+            - ./var/debug.log:/var/www/log/debug.log
+        ports:
+            - '80:80'
+        environment:
+            DOMAIN: bonhaus.localhost
+        depends_on:
+            - mysql
+
+    pma:
+        image: 'phpmyadmin/phpmyadmin'
+        ports:
+            - '9020:80'
+        depends_on:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: root
+            PMA_PASSWORD: 1q2w3e4r

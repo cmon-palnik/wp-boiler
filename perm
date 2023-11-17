@@ -1,0 +1,4 @@
+#!/bin/sh
+sudo chown -R cmon:www-data $1
+chmod -R g+rw $1
+chmod -R o+r $1
