@@ -1,0 +1,9 @@
+{
+    "name": "palnik-cmon/wp-boiler",
+    "config": {
+        "vendor-dir": "app/wp-content/themes/wp-boiler/src/vendor"
+    },    
+    "require": {
+        
+    }
+}

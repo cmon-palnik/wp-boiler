@@ -1,0 +1,6 @@
+@import 'blankslate-reboot';
+@import '../bootstrap/scss/reboot';
+
+input::-ms-clear {
+    display: none;
+}
