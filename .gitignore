@@ -1,4 +1,4 @@
-/nbproject/
-!/var/.gitkeep
-/var
-/.idea/
+nbproject/
+.idea/
+var/*
+!var/.gitkeep

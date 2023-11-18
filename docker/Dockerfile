@@ -21,3 +21,5 @@ RUN mv wp-cli.phar /usr/bin/wp-cli.phar
 COPY ./docker/wp-su.sh /usr/bin/wp
 RUN chmod +x /usr/bin/wp
 
+RUN echo >/var/www/log/debug.log
+
