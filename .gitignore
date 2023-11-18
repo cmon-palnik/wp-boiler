@@ -1,3 +1,4 @@
 /nbproject/
-var
+!/var/.gitkeep
+/var
 /.idea/
