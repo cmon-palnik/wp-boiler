@@ -1,4 +1,4 @@
 nbproject/
 .idea/
 var/*
-!var/.gitkeep
+!var/debug.log

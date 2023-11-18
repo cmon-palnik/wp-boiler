@@ -9,7 +9,7 @@ define( 'WP_AUTO_UPDATE_CORE', false );
 
 define( 'DB_CHARSET', 'utf8mb4' );
 define( 'DB_COLLATE', '' );
-$table_prefix = 'boiler_';
+$table_prefix = 'wpb_';
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );

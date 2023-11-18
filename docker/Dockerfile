@@ -21,5 +21,6 @@ RUN mv wp-cli.phar /usr/bin/wp-cli.phar
 COPY ./docker/wp-su.sh /usr/bin/wp
 RUN chmod +x /usr/bin/wp
 
+RUN mkdir /var/www/log
 RUN echo >/var/www/log/debug.log
-
+COPY ./app/wp-db-config.php /var/www/html/.wp-db-config.php
