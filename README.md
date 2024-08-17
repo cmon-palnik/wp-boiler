@@ -2,8 +2,8 @@
 Light boilerplate for Wordpress development (no webpack)
 
 # Docker-compose includes
-* php8.2:apache + composer + wp-cli
-* mysql5.7
+* wordpress:apache + composer + wp-cli
+* mysql8.0
 * pma
 
 # Theme includes

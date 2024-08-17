@@ -1,26 +1,29 @@
-FROM php:8.2-apache
+FROM wordpress:apache
 
-RUN apt-get update && apt-get install --no-install-recommends -y wget libzip-dev
-RUN apt-get install -qqy zip curl unzip mc sudo less
-    
-# Install composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_MEMORY_LIMIT -1
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN apt-get update && apt-get install -y less git cron nano mariadb-client net-tools mc sudo
 
-RUN docker-php-ext-install zip
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install mysqli
+RUN set -eux; \
+    EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
+    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"; \
+    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then \
+        >&2 echo 'ERROR: Invalid Composer installer checksum. Exited.'; \
+        rm composer-setup.php; \
+        exit 1; \
+    fi; \
+    php composer-setup.php; \
+    RESULT=$?; \
+    rm composer-setup.php ;\
+    if [ ! $RESULT -eq 0 ]; then \
+        echo "Composer installation problem. Exited."; \
+        exit 1; \
+    fi; \
+    mv /var/www/html/composer.phar /usr/local/bin/composer; \
+    chmod +x /usr/local/bin/composer
 
-RUN a2enmod rewrite
+COPY docker/apache2-wordpress.sh /usr/local/bin/
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/bin/wp-cli.phar
-COPY ./docker/wp-su.sh /usr/bin/wp
-RUN chmod +x /usr/bin/wp
-
-RUN mkdir /var/www/log
-RUN echo >/var/www/log/debug.log
-COPY ./app/wp-db-config.php /var/www/html/.wp-db-config.php
+ENTRYPOINT ["docker-entrypoint.sh", "apache2-wordpress.sh", "apache2-foreground"]
