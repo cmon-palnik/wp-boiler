@@ -25,5 +25,8 @@ RUN set -eux; \
     chmod +x /usr/local/bin/composer
 
 COPY docker/apache2-wordpress.sh /usr/local/bin/
+COPY ./docker/wp-su.sh /usr/bin/wp
+RUN chmod +x /usr/bin/wp
 
 ENTRYPOINT ["docker-entrypoint.sh", "apache2-wordpress.sh", "apache2-foreground"]
+# "tail", "-f"]

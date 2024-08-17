@@ -15,6 +15,11 @@ services:
             MYSQL_DATABASE: wordpress
             MYSQL_USER: wp
             MYSQL_PASSWORD: 1q2w3e4r
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     www:
         build:
@@ -27,14 +32,14 @@ services:
             - '80:80'
         environment:
             # HTTP_HOST: http://localhost:80
-            # WORDPRESS_DB_HOST: mysql      # default
+            # WORDPRESS_DB_HOST: mysql:3306      # default
             # WORDPRESS_DB_NAME: wordpress  # default
-            WORDPRESS_TABLE_PREFIX: l2e_
+            WORDPRESS_TABLE_PREFIX: wpb_
             WORDPRESS_DB_USER: wp
             WORDPRESS_DB_PASSWORD: 1q2w3e4r
-            WORDPRESS_THEME: /var/www/html/wp-content/themes/wp-boiler
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy
 
     pma:
         image: 'phpmyadmin/phpmyadmin'
