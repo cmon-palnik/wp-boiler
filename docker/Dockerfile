@@ -3,7 +3,7 @@ FROM wordpress:apache
 RUN apt-get update && apt-get install -y less git cron nano mariadb-client net-tools mc sudo
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
+    chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp-cli.phar
 
 RUN set -eux; \
     EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
